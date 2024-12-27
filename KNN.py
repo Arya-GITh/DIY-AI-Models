@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_digits
 from scipy.stats import mode
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
 digits = load_digits()
 
 X = pd.DataFrame(digits.data)
@@ -47,11 +49,18 @@ print(score(Y_predict,Y_test))
 k_val = range(1,20)
 
 pred_val = []
+sci_val = []
+
 for k in k_val:
     pred_val.append(score(knn_classify(X_train, X_test, Y_train,k), Y_test))
+    sci_model = KNeighborsClassifier(k)
+    sci_model.fit(X_train,Y_train)
+    sci_val.append(accuracy_score(Y_test,sci_model.predict(X_test)))
 
-plt.plot(k_val,pred_val)
+plt.plot(k_val, sci_val, label =  "scikit")
+plt.plot(k_val, pred_val, label = "own", linestyle = "dotted")
 plt.ylabel("accuracy")
 plt.xlabel("k-value")
 plt.title("finding the optimal k")
+plt.legend()
 plt.show()
