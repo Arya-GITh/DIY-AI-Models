@@ -8,6 +8,7 @@ from itertools import combinations_with_replacement
 from Multiple_Linear_Regression import mult_lin_reg,adjusted_r2
 import numpy as np
 from math import comb
+from sklearn.pipeline import Pipeline
 
 def pol_features(X,degree):
     n_samples, n_features = X.shape
@@ -40,18 +41,34 @@ if __name__ == "__main__":
     y = 5 + 4 * x1 - 1.6 * x2 + 0.95 * (x1 ** 2) + 0.67 * (x2 ** 2) + 1.02 * (x1 * x2) + noise
     X = np.column_stack((x1, x2))
 
+    #own model
     X_train,X_test,y_train,y_test = train_test_split(X,y, test_size=0.2)
     y_pred = mult_pol_regress(X_train,X_test,y_train,2)
     
-    deg = range(1,5)
-    y_hat_list = []
+    #sklearn model
+    def sklearn_model(X_train,X_test,y_train,degree):
+        pipeline = Pipeline([
+        ('scaler', StandardScaler()),
+        ('poly', PolynomialFeatures(degree=degree, include_bias=False, interaction_only=False)),
+        ('regressor', LinearRegression())])
+        pipeline.fit(X_train,y_train)
+        Y_hat = pipeline.predict(X_test)
+        return Y_hat
 
+    deg = range(1,5)
+    y_hat_list_own = []
+    y_hat_list_sci = []
     for d in deg:
         val = adjusted_r2(mult_pol_regress(X_train,X_test,y_train,d),y_test,comb(n_features+d,d))
-        y_hat_list.append(val)
+        y_hat_list_own.append(val)
+        val_sci = adjusted_r2(sklearn_model(X_train,X_test,y_train,d),y_test,comb(n_features+d,d))
+        y_hat_list_sci.append(val_sci)
+
     
-    plt.plot(deg,y_hat_list)
+    plt.plot(deg,y_hat_list_own, label = "own")
+    plt.scatter(deg,y_hat_list_sci, label = "sklearn", linestyle = "dotted", c = "black")
     plt.title("Degree of fit vs Adjusted R2")
     plt.ylabel("Adjusted R2")
     plt.xlabel("Degree")
+    plt.legend()
     plt.show()
