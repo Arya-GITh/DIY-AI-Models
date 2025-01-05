@@ -60,7 +60,7 @@ def lin_dis_a(X_train,y_train,X_test,ax):
     ax.set_xlabel('dim1')
     ax.set_ylabel('dim2')
     ax.legend()
-    plt.show()
+  
     
     return predictions
 
@@ -84,3 +84,4 @@ if __name__ == "__main__":
     ldr.fit(X_train,y_train)
     predictions = ldr.predict(X_test)
     print(f"sklearn accuracy: {accuracy_score(y_test,predictions)}")
+    plt.show()
