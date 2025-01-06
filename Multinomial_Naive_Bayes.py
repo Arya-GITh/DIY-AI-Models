@@ -34,6 +34,8 @@ def multinomial_nb(X_train,X_test,y_train, alpha = 1):
     
     return predictions
 if __name__ == "__main__":
+
+    ###Chat-GPT generated synthetic data
     np.random.set_state = 1
     X = []
     y = []
