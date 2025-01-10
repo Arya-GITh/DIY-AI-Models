@@ -23,7 +23,7 @@ class PCA_own():
         cov = np.cov(X_train_m,rowvar=0)
         eigvals,eigvecs = np.linalg.eig(cov)
         sorted_indices = np.argsort(eigvals)[::-1][:self.n]
-        sorted_eigvecs = eigvecs[sorted_indices]
+        sorted_eigvecs = eigvecs[:,sorted_indices]
         self.eigvecs = sorted_eigvecs
         X_train_transform = np.dot(X_train_m,sorted_eigvecs)
 
