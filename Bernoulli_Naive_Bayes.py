@@ -46,7 +46,7 @@ if __name__ == "__main__":
     # Class 0: P(x_i=1) = 0.3
     # Class 1: P(x_i=1) = 0.7
     p_class = {0: 0.3, 1: 0.7}
-
+    
     for c in [0, 1]:
         X[y == c] = np.random.binomial(1, p_class[c], size=(np.sum(y == c), n_features))
 
