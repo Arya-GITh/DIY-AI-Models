@@ -46,7 +46,7 @@ class PLS_own():
                 c /= np.linalg.norm(c)
                 u1 = Y_c * c
 
-                if np.linalg.norm(u0-u1) < 1e-12:
+                if np.linalg.norm(u0-u1) < 1e-15:
                     break
                 u0 = u1
             
