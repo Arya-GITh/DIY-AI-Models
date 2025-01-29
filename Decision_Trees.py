@@ -89,23 +89,22 @@ def main():
     X_train_r,X_test_r,y_train_r,y_test_r = train_test_split(X_reg,y_reg)
     X_train_c,X_test_c,y_train_c,y_test_c = train_test_split(X_c,y_c)
 
+    #run classification
     y_hat_clasf_own = decision_tree(X_train_c,y_train_c,X_test_c,type = "clasf")
-    #y_hat_reg_own = decision_tree(X_train_r,y_train_r,X_test_r,type="reg")
-    
     score_own_clasf = accuracy_score(y_test_c,y_hat_clasf_own)
-    #score_own_reg = mean_squared_error(y_test_r,y_hat_reg_own)
-
     clasf_sci = DecisionTreeClassifier()
-    #reg_sci = DecisionTreeRegressor(max_depth=None)
-
     clasf_sci.fit(X_train_c,y_train_c)
-    #reg_sci.fit(X_train_r,y_train_r)
-
     score_sci_clasf = clasf_sci.score(X_test_c,y_test_c)
-    #score_sci_reg = reg_sci.score(X_test_r,y_test_r)
-
-    #print("Reg own score:" + str(score_own_reg) + ". Sklearn score:" + str(score_sci_reg))
     print("Clasf own score:" + str(score_own_clasf) + ". Sklearn score:" + str(score_sci_clasf))
+
+    #run regression
+    #y_hat_reg_own = decision_tree(X_train_r,y_train_r,X_test_r,type="reg")
+    #score_own_reg = mean_squared_error(y_test_r,y_hat_reg_own)
+    #reg_sci = DecisionTreeRegressor(max_depth=None)
+    #reg_sci.fit(X_train_r,y_train_r)
+    #score_sci_reg = reg_sci.score(X_test_r,y_test_r)
+    #print("Reg own score:" + str(score_own_reg) + ". Sklearn score:" + str(score_sci_reg))
+
 
 if __name__ == "__main__":
     main()
