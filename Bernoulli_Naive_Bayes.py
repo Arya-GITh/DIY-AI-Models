@@ -1,3 +1,6 @@
+"""
+Build and compare my onw Bernoulli_Naive_Bayes Classifier with Sk-learn's
+"""
 from sklearn.naive_bayes import BernoulliNB
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -5,6 +8,20 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 #own bernoulli nb classifier
+"""
+Returns predicted values based off a trained bernoulli nb
+
+
+
+Parameters:
+X_train: An np array of input values of train data with shape (num_samples, num_features)
+X_train: An np array of input values of test data with shape (num_samples, num_features)
+y_train: An np array of output values of test data with shape (num_samples,1)
+alpha: A positive number of counts added to ensure the probability of a category is never zero
+
+Returns a list of predictions based on X_test
+
+"""
 def bernoulli_nb(X_train,X_test,y_train, alpha = 1):
     #code
 
