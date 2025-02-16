@@ -8,6 +8,17 @@ from scipy.stats import mode
 #define a node in a tree and subsidiary functions
 
 class Node:
+    """
+    A class that defines a node for a decision tree
+
+    Attributes:
+
+    feature: str, it refers to the input feature that is used to split the node
+    threshold: float, it refers to the decision boundary for the split for the chosen feature
+    left: Node, the child node where the values of the feature selected are <= threshold
+    right: Node, the child node where the values of the feature selected are > threshold
+    value:float If this is the leaf node, the value is the output value of the node (else None)
+    """
     def __init__(self,feature=None,threshold=None,left=None,right=None,value=None):
         self.feature = feature
         self.threshold = threshold
@@ -16,14 +27,34 @@ class Node:
         self.value = value
 
 def mse_own(y):
+    """
+    A function that returns the mean of a np-array
+
+    Param y: A np-array
+    """
     return np.mean(np.square(y-np.mean(y)))
 
 def gini(y):
+    """
+    A function that returns the gini impurity of a np-array
+    
+    Param y: A np-array
+    """
     cls, count = np.unique(y,return_counts=True)
     probs = count/np.sum(count)
     return (1 - np.sum(probs**2))
 
 def split(X_train,y_train,criteria):
+    """
+    A function that provides the information for the best split for a particular data set
+
+    Parameter:
+    X_train: A np array of input train data with shape (num_samples, mun_features)
+    y_train: A mp array of output train data with same (num_samples,1)
+    criteria: A string either 'clasf' or 'reg' depending on whether its regresison/classification
+
+    Returns: A tuple with the feature, threshold and the groups based on the split
+    """
     m,n_feat = X_train.shape
     best_feature,best_threshold,best_score,best_groups = None,None,float("inf"), None
     for feature in range(n_feat):
@@ -43,7 +74,21 @@ def split(X_train,y_train,criteria):
 
 
 
+
 def build(X_train,y_train,criteria, min_samp_split = 2, max_depth = 10, depth=0):
+    """
+    A function that builds the decision trees levels
+
+    Parameter:
+    X_train: A np array of input train data with shape (num_samples, mun_features)
+    y_train: A mp array of output train data with same (num_samples,1)
+    criteria: A string either 'clasf' or 'reg' depending on whether its regresison/classification
+    min_samp_split: Positive integer, that specifes the min number of samples for a valid split
+    max_depth: A positive integer that defines the maximum number of levels in a decision tree
+    depth: Specifies the current depth of the decision tree to recurse on
+    
+    Returns: Node, A reference to the root node of a decision tree
+    """
     #build tree
     if len(np.unique(y_train)) <= 1 or len(y_train) < min_samp_split or depth == max_depth:
         return Node(value = np.mean(y_train) if criteria == mse_own else np.bincount(y_train).argmax())
@@ -58,6 +103,16 @@ def build(X_train,y_train,criteria, min_samp_split = 2, max_depth = 10, depth=0)
     return Node(feature=feature,threshold=threshold,left=left,right=right)
 
 def predict(X_test,tree):
+    """
+    A function that predicts the levels based on a decision tree
+
+    Parameter:
+
+    X_test: A np array of input test data with shape (num_samples, mun_features)
+    tree: A Node, it stores the reference to the root node of a decision tree
+    
+    Returns:  list, A collection of predictions based on the test values
+    """
     predictions = []
     for x in X_test:
         node = tree
@@ -71,6 +126,17 @@ def predict(X_test,tree):
 
 #function to call: type can be either "reg" or "clasf" 
 def decision_tree (X_train,y_train,X_test,type):
+    """
+    A function that calls the tree helper functions, to build and predict values for a decision tree
+
+    Parameter:
+    X_train: A np array of input train data with shape (num_samples, mun_features)
+    y_train: A mp array of output train data with same (num_samples,1)
+    X_test: A np array of input test data with shape (num_samples, mun_features)
+    type: A String, 'clasf' or 'reg' whether its classification or regression tree
+    
+    Returns:  list, A collection of predictions based on the test values
+    """
     assert (type == "clasf" or type == "reg")
 
     criteria = mse_own if type == "reg" else gini 
